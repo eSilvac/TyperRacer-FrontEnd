@@ -1,19 +1,19 @@
-import App from './App';
+import App from './pages/App';
 import React from 'react';
 
-// import store from './js/store/index';
+import store from './redux/store/store';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-// import { verifyUser } from './js/actionsCreator/user/index';
+import { verifyUser } from './redux/actions/index';
 
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from './serviceWorker';
 
-// store.dispatch(verifyUser());
+store.dispatch(verifyUser());
 
 render(
-  <Provider>
+  <Provider store={store}>
     <App />
   </Provider>,
   document.getElementById("root")
