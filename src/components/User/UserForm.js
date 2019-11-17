@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
 // Redux
-import { createNewUser } from './../../redux/actions/index';
 import { connect } from 'react-redux';
+import { verifyUser } from './../../redux/actions/index';
+import { GraphqlApi, GraphqlQueries } from '../../api/graphql'
 
 // Bootstrap
 import Form from 'react-bootstrap/Form'
@@ -25,41 +26,60 @@ class UserForm extends Component {
     this.setState({userParams: userParams});
   }
   
-  mySubmitHandler(event) {
-    event.preventDefault();
-    const newUser = this.state.userParams;
-    this.props.createNewUser(newUser);
+  async mySubmitHandler(event) {
+    event.preventDefault()
+    const user = this.state.userParams;
+
+    this.setState({
+      loading: true
+    });
+
+    try {
+      const { data } = await GraphqlApi.post('graphql', {
+        query: this.props.newUser ? GraphqlQueries.createUser : GraphqlQueries.createSession,
+        variables: {
+          userPayload: user
+        }
+      });
+      const token = this.props.newUser ? data.data.registerUser.token : data.data.loginUser.token;
+      localStorage.setItem('authenticationToken', token); 
+      this.props.verifyUser();
+      this.setState({ redirect: true });
+    } catch (error) {
+      console.log(error);
+      this.setState({ error });
+    } finally {
+      this.setState({ loading: false });
+    }
   }
   
   render () {
-    if (this.state.redirect) return <Redirect to='/'/>;;
+    if (this.state.redirect) return <Redirect to='/'/>;
     return (
       <Form onSubmit={this.mySubmitHandler.bind(this)}>
+        <Form.Group >
+          <Form.Control 
+            name="username" 
+            type="text" 
+            placeholder="Username" 
+            onChange={this.myChangeHandler} 
+            value={this.state.userParams.username}
+          />
+        </Form.Group>
 
         {(this.props.newUser) ? (
           <Form.Group >
             <Form.Control 
-              name="username" 
+              name="email" 
               type="text" 
-              placeholder="Username" 
+              placeholder="Email" 
               onChange={this.myChangeHandler} 
-              value={this.state.userParams.username}
+              value={this.state.userParams.email}
             />
           </Form.Group>
-
         ) : (
           ""
         )}  
-
-        <Form.Group >
-          <Form.Control 
-            name="email" 
-            type="text" 
-            placeholder="Email" 
-            onChange={this.myChangeHandler} 
-            value={this.state.userParams.email}
-          />
-        </Form.Group>
 
         <Form.Group >
           <Form.Control 
@@ -85,7 +105,7 @@ class UserForm extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    createNewUser: user => dispatch(createNewUser(user))
+    verifyUser: () => dispatch(verifyUser())
   };
 };
 

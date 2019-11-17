@@ -19,7 +19,7 @@ function Register() {
               <h5 className="m-0">Register</h5>
             </Card.Header>
             <Card.Body>
-              <UserForm userParams={{username:"", email: "", password: ""}} newUser={true} path={"/users"} />
+              <UserForm userParams={{username:"", email: "", password: ""}} newUser={true} />
             </Card.Body>
           </Card>
         </Col>
@@ -29,5 +29,3 @@ function Register() {
 }
 
 export default Register;
-
-

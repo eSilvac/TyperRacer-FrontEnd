@@ -20,7 +20,7 @@ function NavbarLinks({ currentUser, logoutUser }) {
         </Nav>
       ) : (
         <Nav className="ml-auto">
-          <Navbar.Text className="mr-5">{currentUser.email}</Navbar.Text>
+          <Navbar.Text className="mr-5">{currentUser.username}</Navbar.Text>
           <Link className="nav-link text-white mr-1" to="/posts/new">Create Post</Link>
           <Nav.Link className="nav-link text-white" onClick={logoutUser}>Log Out</Nav.Link>
         </Nav>
