@@ -6,6 +6,7 @@ const queries = {
           id
           username
           email
+          admin
         }
       }
     `
@@ -21,6 +22,13 @@ const queries = {
     mutation CreateUserSession($userPayload: UserLoginInputType!) {
       loginUser(userPayload: $userPayload) {
         token
+      }
+    }
+  `,
+  createQuote: `
+    mutation CreateQuote($quotePayload: QuoteInputType!) {
+      createQuote(quotePayload: $quotePayload) {
+        id 
       }
     }
   `
