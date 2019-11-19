@@ -31,6 +31,19 @@ const queries = {
         id 
       }
     }
+  `,
+  createRace: `
+    mutation CreateRace($racePayload: RaceInputType!) {
+      createRace(racePayload: $racePayload) {
+        race {
+          id
+          createdAt
+        }
+        quote {
+          text
+        }
+      }
+    }
   `
 }
 

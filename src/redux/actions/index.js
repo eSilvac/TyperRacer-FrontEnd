@@ -2,6 +2,7 @@
 
 import { FETCH_USER } from '../constants/action-types'
 import { LOGOUT_USER } from '../constants/action-types'
+import { SET_RACE } from '../constants/action-types'
 
 const dispatchAction = (dispatch, type, payload) => {
   dispatch({
@@ -28,6 +29,16 @@ export function verifyUser() {
     })
     .catch(err => console.log(err))
   }
+}
+
+export function setRace(racePayload) {
+  console.log(racePayload)
+  const currentRacePayload = { 
+    id: racePayload.race.id,
+    text: racePayload.quote.text,
+    createdAt: racePayload.race.createdAt,
+  }
+  return dispatch => dispatchAction(dispatch, SET_RACE, currentRacePayload);
 }
 
 export function logoutUser() {

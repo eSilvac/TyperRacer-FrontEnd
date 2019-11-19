@@ -1,19 +1,13 @@
 import { FETCH_USER } from '../constants/action-types'
 import { LOGOUT_USER } from '../constants/action-types'
 
-const initialState = {
-  currentUser: {}
-};
-
-function userReducer(state = initialState, action) {
+export default function currentUser(state = {}, action) {
   switch (action.type) {
     case FETCH_USER:
-      return { ...state, currentUser: action.payload }
+      return state = action.payload
     case LOGOUT_USER:
-      return { currentUser: {} }
+      return state = {}
     default:
       return state;
   }
 };
-
-export default userReducer;
