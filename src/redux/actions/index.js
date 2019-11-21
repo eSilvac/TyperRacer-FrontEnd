@@ -1,4 +1,4 @@
-  import { GraphqlApi, GraphqlQueries } from '../../api/graphql'
+import { GraphqlApi, GraphqlQueries } from '../../api/graphql'
 
 import { FETCH_USER } from '../constants/action-types'
 import { LOGOUT_USER } from '../constants/action-types'
@@ -32,7 +32,6 @@ export function verifyUser() {
 }
 
 export function setRace(racePayload) {
-  console.log(racePayload)
   const currentRacePayload = { 
     id: racePayload.race.id,
     text: racePayload.quote.text,

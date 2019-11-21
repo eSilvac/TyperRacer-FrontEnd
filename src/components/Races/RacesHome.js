@@ -1,9 +1,9 @@
 // Configurations
 import React from 'react';
-import { Link } from "react-router-dom";
 
 // Components
-import RaceForm from './../../components/Races/RaceForm';
+import RaceForm from './RaceForm';
+import Race from './Race';
 
 // Bootstrap
 import Row from 'react-bootstrap/Row';
@@ -16,9 +16,10 @@ function NavbarLinks({ currentRace }) {
   return (
     <Row className="justify-content-center">
       {Object.keys(currentRace).length ? (
-        <Col xs={10}>
-          <div className="text-center mt-3">
-            <h3 className="mb-3 bold-weight-bold">Lets Get Typing !</h3>
+        <Col xs={12}>
+          <div className="text-center mt-5">
+              <h3 className="mb-4 bold-weight-bold">Lets Get Typing !</h3>
+            <Race />
           </div>
         </Col>
       ) : (
