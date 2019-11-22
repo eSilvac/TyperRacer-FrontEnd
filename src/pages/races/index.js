@@ -8,7 +8,7 @@ import Container from 'react-bootstrap/Container';
 
 function newQuote() {
   return (
-    <Container>
+    <Container fluid={true}>
       <RaceHome />
     </Container>
   );

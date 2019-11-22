@@ -1,7 +1,9 @@
-import { SET_INITIAL_STATE } from '../constants/action-types'
-import { SET_USER_TYPING } from '../constants/action-types'
-import { SET_LETTERS } from '../constants/action-types'
-import { SET_NEXT_WORD } from '../constants/action-types'
+import { SET_INITIAL_STATE } from '../constants/action-types';
+import { SET_USER_TYPING } from '../constants/action-types';
+import { SET_LETTERS } from '../constants/action-types';
+import { SET_ERROR } from '../constants/action-types';
+import { SET_NEXT_WORD } from '../constants/action-types';
+import { SET_PERCENTAGE } from '../constants/action-types';
 
 const dispatchAction = (dispatch, type, payload) => {
   dispatch({
@@ -31,11 +33,28 @@ export function setUserTyping(payload) {
   return dispatch => dispatchAction(dispatch, SET_USER_TYPING, payload);
 }
 
+export function setError() {
+  return dispatch => dispatchAction(dispatch, SET_ERROR, {});
+}
+
+export function setPercentage(text, currentText) {
+  return (dispatch, getState) => {
+    const raceStatus = getState().raceTextStatus;
+    const textLength = getState().currentRace.text.length;
+    const currentTextLength = raceStatus.words.completedText.join(" ").length + raceStatus.letters.completed.length;
+
+    const result = (currentTextLength * 100) / textLength;
+
+    dispatchAction(dispatch, SET_PERCENTAGE, result)
+  } 
+}
+
 function generatePayload(wordsPayload, lettersPayload) {
   return {
     words: wordsPayload,
     letters: lettersPayload,
-    userTypingText: ""
+    userTypingText: "",
+    error: false
   }
 }
 

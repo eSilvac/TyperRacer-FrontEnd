@@ -14,7 +14,7 @@ function RaceText({ raceTextStatus }) {
     return (
       <div>
         <span className="text-success">{ raceTextStatus.words.completedText.join(" ") }</span>
-        <RaceCurrentWord currentWord={raceTextStatus.currentWord}/>
+        <RaceCurrentWord />
         <span className="text-muted">{ raceTextStatus.words.remainingText.join(" ") }</span>
       </div>
     )

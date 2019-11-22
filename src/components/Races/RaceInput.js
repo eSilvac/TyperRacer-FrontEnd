@@ -9,7 +9,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 
 // Redux
 import { connect } from 'react-redux';
-import { setNextWord, setUserTyping, setLetter } from './../../redux/actions/texthandle';
+import { setNextWord, setUserTyping, setLetter, setError, setPercentage } from './../../redux/actions/texthandle';
 
 class RaceInput extends Component {
   handleChange = ( event ) => {
@@ -46,11 +46,17 @@ class RaceInput extends Component {
     const remaingLetters = currentWord.substr(userTypingLenght + 1, currentWord.length);
     const currentLetter = currentWord.charAt(userTypingLenght)
 
-    this.props.setLetter({
-      completed: completedLetters,
-      remaining: remaingLetters,
-      current: currentLetter
-    })
+    if (completedLetters !== inputValue) {
+      this.props.setError();
+    } else {
+      this.props.setLetter({
+        completed: completedLetters,
+        remaining: remaingLetters,
+        current: currentLetter
+      });
+
+      this.props.setPercentage(this.props.currentRace.text, completedLetters);
+    }
   }
 
   render() {
@@ -65,7 +71,7 @@ class RaceInput extends Component {
           placeholder="Type the text"
           autoComplete="off"
           aria-describedby="inputGroupPrepend"
-          className="text-input py-4"
+          className={"text-input py-4" + (this.props.raceTextStatus.error ? " bg-error" : "") }
           value={this.props.raceTextStatus.userTypingText} 
           onChange={this.handleChange.bind(this)}
         />
@@ -83,7 +89,9 @@ const mapDispatchToProps = dispatch => {
   return {
     setLetter: (payload) => dispatch(setLetter(payload)),
     setNextWord: (payload) => dispatch(setNextWord(payload)),
-    setUserTyping: (payload) => dispatch(setUserTyping(payload))
+    setUserTyping: (payload) => dispatch(setUserTyping(payload)),
+    setError: () => dispatch(setError()),
+    setPercentage: (text, completedText) => dispatch(setPercentage(text, completedText))
   };
 };
 

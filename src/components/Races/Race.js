@@ -5,6 +5,7 @@ import './stylesheets/races.scss';
 // Components
 import RaceText from './RaceText';
 import RaceInput from './RaceInput';
+import RaceTrack from './RaceTrack';
 
 // Bootstrap
 import Row from 'react-bootstrap/Row';
@@ -16,14 +17,14 @@ import Form from 'react-bootstrap/Form';
 import { connect } from 'react-redux';
 import { setInitialTextStatus } from './../../redux/actions/texthandle';
 
-function Race({ currentRace, setInitialTextStatus }) {
+function Race({ currentRace, setInitialTextStatus  }) {
   useEffect( () => {
     setInitialTextStatus(currentRace.text);
   });
 
   return (
-    <Row className="my-4">
-      <Col className="raceText" xs={6}>
+    <Row className="justify-content-center my-4">
+      <Col className="raceText" xs={5}>
         <Card body className="mt-2">
           <RaceText />
         </Card>
@@ -33,12 +34,18 @@ function Race({ currentRace, setInitialTextStatus }) {
           </Form.Group>
         </Form>
       </Col>
+
+      <Col className="raceTrack" xs={5}>
+        <Card body className="mt-2">
+          <RaceTrack />
+        </Card>
+      </Col>
     </Row>
   );
 }
 
 const mapStateToProps = state => ({
-  currentRace: state.currentRace
+  currentRace: state.currentRace,
 });
 
 const mapDispatchToProps = dispatch => {

@@ -12,13 +12,13 @@ import Col from 'react-bootstrap/Col';
 // Redux
 import { connect } from 'react-redux';
 
-function NavbarLinks({ currentRace }) {
+function NavbarLinks({ currentRace, raceTextStatus }) {
   return (
     <Row className="justify-content-center">
       {Object.keys(currentRace).length ? (
         <Col xs={12}>
           <div className="text-center mt-5">
-              <h3 className="mb-4 bold-weight-bold">Lets Get Typing !</h3>
+            <h3 className="mb-4 bold-weight-bold">Lets Get Typing !</h3>
             <Race />
           </div>
         </Col>
