@@ -1,9 +1,6 @@
-import { SET_INITIAL_STATE } from '../constants/action-types';
-import { SET_USER_TYPING } from '../constants/action-types';
-import { SET_LETTERS } from '../constants/action-types';
-import { SET_ERROR } from '../constants/action-types';
-import { SET_NEXT_WORD } from '../constants/action-types';
 import { SET_PERCENTAGE } from '../constants/action-types';
+import { SET_INPUT_STATUS } from '../constants/action-types';
+import { SET_INITIAL_STATE } from '../constants/action-types';
 
 const dispatchAction = (dispatch, type, payload) => {
   dispatch({
@@ -12,6 +9,10 @@ const dispatchAction = (dispatch, type, payload) => {
   });
 };
 
+export function setInputStatus(payload) {
+  return dispatch => dispatchAction(dispatch, SET_INPUT_STATUS, payload); 
+}
+
 export function setInitialTextStatus(text) {
   const wordsPayload = initialWordsPayload(text);
   const lettersPayload = initialLetterPayload(wordsPayload.currentWord);
@@ -19,29 +20,11 @@ export function setInitialTextStatus(text) {
   return dispatch => dispatchAction(dispatch, SET_INITIAL_STATE, generatePayload(wordsPayload, lettersPayload));
 }
 
-export function setNextWord(wordsPayload) {
-  const lettersPayload = initialLetterPayload(wordsPayload.currentWord);
-
-  return dispatch => dispatchAction(dispatch, SET_NEXT_WORD, generatePayload(wordsPayload, lettersPayload));
-}
-
-export function setLetter(payload) {
-  return dispatch => dispatchAction(dispatch, SET_LETTERS, payload);
-}
-
-export function setUserTyping(payload) {
-  return dispatch => dispatchAction(dispatch, SET_USER_TYPING, payload);
-}
-
-export function setError() {
-  return dispatch => dispatchAction(dispatch, SET_ERROR, {});
-}
-
-export function setPercentage(text, currentText) {
+export function setPercentage() {
   return (dispatch, getState) => {
     const raceStatus = getState().raceTextStatus;
     const textLength = getState().currentRace.text.length;
-    const currentTextLength = raceStatus.words.completedText.join(" ").length + raceStatus.letters.completed.length;
+    const currentTextLength = raceStatus.words.completedText.join(" ").length + raceStatus.actualWord.completed.length;
 
     const result = (currentTextLength * 100) / textLength;
 
@@ -52,7 +35,7 @@ export function setPercentage(text, currentText) {
 function generatePayload(wordsPayload, lettersPayload) {
   return {
     words: wordsPayload,
-    letters: lettersPayload,
+    actualWord: lettersPayload,
     userTypingText: "",
     error: false
   }

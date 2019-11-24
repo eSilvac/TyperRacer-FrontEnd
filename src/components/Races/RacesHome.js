@@ -23,7 +23,7 @@ function NavbarLinks({ currentRace, raceTextStatus }) {
           </div>
         </Col>
       ) : (
-        <Col xs={6}>
+        <Col xs={4}>
           <div className="text-center mt-5">
             <h3 className="mb-3 bold-weight-bold">The New Typer Racer</h3>
             <span className="m-0">A place where you can challenge your friends and see who is the fastest using the keyboard !</span>

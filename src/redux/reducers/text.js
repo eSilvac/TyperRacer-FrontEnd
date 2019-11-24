@@ -1,31 +1,70 @@
-import { SET_INITIAL_STATE } from '../constants/action-types';
-import { SET_USER_TYPING } from '../constants/action-types';
 import { SET_PERCENTAGE } from '../constants/action-types';
-import { SET_NEXT_WORD } from '../constants/action-types';
-import { SET_LETTERS } from '../constants/action-types';
-import { SET_ERROR } from '../constants/action-types';
+import { SET_INPUT_STATUS } from '../constants/action-types';
+import { SET_INITIAL_STATE } from '../constants/action-types';
 
 export default function raceTextStatus(state = {}, action) {
   switch (action.type) {
     case SET_INITIAL_STATE:
       return state = action.payload;
-    case SET_NEXT_WORD:
-      return {
-        ...state,
-        words: action.payload.words,
-        letters: action.payload.letters,
-        userTypingText: "",
-        error: false
-      }
-    case SET_LETTERS:
-      return { ...state, letters: action.payload, error: false }
-    case SET_USER_TYPING:
-      return { ...state, userTypingText: action.payload }
-    case SET_ERROR:
-      return { ...state, error: true }
+    case SET_INPUT_STATUS: 
+      return handleInputAction(state, action.payload)
     case SET_PERCENTAGE:
       return { ...state, percentage: action.payload }
     default:
       return state;
   }
 };
+
+function handleInputAction(state, payload) {
+  const textCurrentWord = state.words.currentWord;
+  
+  if (payload.inputValue.slice(0, -1) === textCurrentWord && (/\s+$/).test(payload.inputValue)) {
+    return setNextWord(state);
+  } else {
+    state = { ...state, userTypingText: payload.inputValue }
+    return setCurrentWord(state, payload.inputValue, textCurrentWord);
+  }
+}
+
+function setNextWord(state) {
+  const { currentWord, completedText, remainingText } = state.words;
+  const currentTextWord = remainingText.shift();
+  const pastWord = currentWord;
+  completedText.push(pastWord);
+
+  const words = generateWordsState(completedText, remainingText, currentTextWord);
+  const actualWord = generateActualWordState(currentTextWord);
+
+  return ({ words: words, actualWord: actualWord, userTypingText: "", error: false })
+}
+
+function setCurrentWord(state, inputValue, currentWord) {
+  const userTypingLenght = inputValue.length;
+  const completedLetters = currentWord.substr(0, userTypingLenght);
+
+  if (completedLetters !== inputValue) {
+    return { ...state, error: true }
+  }
+
+  const remaingLetters = currentWord.substr(userTypingLenght + 1, currentWord.length);
+  const currentLetter = currentWord.charAt(userTypingLenght);
+  
+  const actualWord = generateActualWordState(null, completedLetters, remaingLetters, currentLetter);
+  return ({ ...state, actualWord: actualWord, error: false })
+}
+
+function generateWordsState(completedText, remainingText, currentWord) {
+  return {
+    currentWord: currentWord, 
+    completedText: completedText,
+    remainingText: remainingText
+  }
+}
+
+function generateActualWordState(currentWord = null, completed, remaining, current) {
+  return {
+    completed: !currentWord ? completed : "",
+    remaining: !currentWord ? remaining : currentWord.substr(1),
+    current: !currentWord ? current : currentWord.charAt(0)
+  }
+}
