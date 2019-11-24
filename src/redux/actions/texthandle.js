@@ -14,10 +14,7 @@ export function setInputStatus(payload) {
 }
 
 export function setInitialTextStatus(text) {
-  const wordsPayload = initialWordsPayload(text);
-  const lettersPayload = initialLetterPayload(wordsPayload.currentWord);
-
-  return dispatch => dispatchAction(dispatch, SET_INITIAL_STATE, generatePayload(wordsPayload, lettersPayload));
+  return dispatch => dispatchAction(dispatch, SET_INITIAL_STATE, text);
 }
 
 export function setPercentage() {
@@ -30,32 +27,4 @@ export function setPercentage() {
 
     dispatchAction(dispatch, SET_PERCENTAGE, result)
   } 
-}
-
-function generatePayload(wordsPayload, lettersPayload) {
-  return {
-    words: wordsPayload,
-    actualWord: lettersPayload,
-    userTypingText: "",
-    error: false
-  }
-}
-
-function initialWordsPayload(text) {
-  const remainingText = text.split(" ");
-  const currentWord = remainingText.shift();
-
-  return {
-    completedText: [],
-    remainingText: remainingText,
-    currentWord: currentWord
-  }
-}
-
-function initialLetterPayload(currentWord) {
-  return {
-    completed: [],
-    remaining: currentWord.substr(1),
-    current: currentWord.charAt(0)
-  }
 }

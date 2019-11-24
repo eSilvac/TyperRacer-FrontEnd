@@ -5,15 +5,22 @@ import { SET_INITIAL_STATE } from '../constants/action-types';
 export default function raceTextStatus(state = {}, action) {
   switch (action.type) {
     case SET_INITIAL_STATE:
-      return state = action.payload;
+      return initialRaceState(state, action.payload);
     case SET_INPUT_STATUS: 
-      return handleInputAction(state, action.payload)
+      return handleInputAction(state, action.payload);
     case SET_PERCENTAGE:
       return { ...state, percentage: action.payload }
     default:
       return state;
   }
 };
+
+function initialRaceState(state, text) {
+  const words = generateWordsState(text);
+  const actualWord = generateActualWordState(words.currentWord);
+
+  return ({ words: words, actualWord: actualWord, userTypingText: "", error: false, percentage: 0 })
+}
 
 function handleInputAction(state, payload) {
   const textCurrentWord = state.words.currentWord;
@@ -32,7 +39,7 @@ function setNextWord(state) {
   const pastWord = currentWord;
   completedText.push(pastWord);
 
-  const words = generateWordsState(completedText, remainingText, currentTextWord);
+  const words = generateWordsState(null, completedText, remainingText, currentTextWord);
   const actualWord = generateActualWordState(currentTextWord);
 
   return ({ words: words, actualWord: actualWord, userTypingText: "", error: false })
@@ -53,11 +60,17 @@ function setCurrentWord(state, inputValue, currentWord) {
   return ({ ...state, actualWord: actualWord, error: false })
 }
 
-function generateWordsState(completedText, remainingText, currentWord) {
+function generateWordsState(text = null, completedText, remainingText, currentWord) {
+  if (text) {
+    completedText = [];
+    remainingText = text.split(" ");
+    currentWord = remainingText.shift();
+  }
+
   return {
     currentWord: currentWord, 
+    remainingText: remainingText,
     completedText: completedText,
-    remainingText: remainingText
   }
 }
 
