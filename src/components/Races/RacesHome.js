@@ -4,6 +4,7 @@ import React from 'react';
 // Components
 import RaceForm from './RaceForm';
 import Race from './Race';
+import RaceTitle from './RaceTitle';
 
 // Bootstrap
 import Row from 'react-bootstrap/Row';
@@ -12,13 +13,13 @@ import Col from 'react-bootstrap/Col';
 // Redux
 import { connect } from 'react-redux';
 
-function NavbarLinks({ currentRace, raceTextStatus }) {
+function RaceHome({ currentRace, raceTextStatus }) {
   return (
     <Row className="justify-content-center">
       {Object.keys(currentRace).length ? (
         <Col xs={12}>
           <div className="text-center mt-5">
-            <h3 className="mb-4 bold-weight-bold">Lets Get Typing !</h3>
+            <RaceTitle />
             <Race />
           </div>
         </Col>
@@ -41,4 +42,4 @@ const mapStateToProps = state => ({
   currentRace: state.currentRace
 });
 
-export default connect(mapStateToProps)(NavbarLinks);
+export default connect(mapStateToProps)(RaceHome);

@@ -1,3 +1,4 @@
+import { SET_WPM } from '../constants/action-types';
 import { SET_PERCENTAGE } from '../constants/action-types';
 import { SET_INPUT_STATUS } from '../constants/action-types';
 import { SET_INITIAL_STATE } from '../constants/action-types';
@@ -27,4 +28,8 @@ export function setPercentage() {
 
     dispatchAction(dispatch, SET_PERCENTAGE, result)
   } 
+}
+
+export function setWPM(time) {
+  return dispatch => dispatchAction(dispatch, SET_WPM, time);
 }

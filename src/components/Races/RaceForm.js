@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 // Redux
 import { GraphqlApi, GraphqlQueries } from '../../api/graphql'
 import { connect } from 'react-redux';
-import { setRace } from './../../redux/actions/index';
+import { setRace } from './../../redux/actions/racehandle';
 
 // Bootstrap
 import Form from 'react-bootstrap/Form'

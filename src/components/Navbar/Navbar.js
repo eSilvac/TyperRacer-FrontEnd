@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from "react-router-dom";
 
 //Bootstrap
 import Navbar from 'react-bootstrap/Navbar';
@@ -7,12 +6,13 @@ import Container from 'react-bootstrap/Container'
 
 // User
 import NavbarLinks from './NavbarLinks'
+import NavbarHomeButton from './NavbarHomeButton'
 
 function PageNavbar() {
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
-        <Link className="navbar-brand" to="/">TypeRacer v2</Link>
+        <NavbarHomeButton />
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <NavbarLinks />
       </Container>

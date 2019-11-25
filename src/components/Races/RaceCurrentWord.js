@@ -13,7 +13,7 @@ function RaceText({ raceTextStatus }) {
     return (
       <>
         <span className="text-success">{ " " + raceTextStatus.actualWord.completed }</span>
-        <span className={ "font-weight-bold" + (raceTextStatus.error ? " bg-error" : "") }>{ raceTextStatus.actualWord.current }</span>
+        <span className={(raceTextStatus.error ? " bg-error" : "") }><ins>{ raceTextStatus.actualWord.current }</ins></span>
         <span className={(raceTextStatus.error ? "bg-error" : "text-muted")}>{ raceTextStatus.actualWord.remaining + " " }</span>
       </>
     )

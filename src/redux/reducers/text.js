@@ -1,3 +1,4 @@
+import { SET_WPM } from '../constants/action-types';
 import { SET_PERCENTAGE } from '../constants/action-types';
 import { SET_INPUT_STATUS } from '../constants/action-types';
 import { SET_INITIAL_STATE } from '../constants/action-types';
@@ -10,6 +11,8 @@ export default function raceTextStatus(state = {}, action) {
       return handleInputAction(state, action.payload);
     case SET_PERCENTAGE:
       return { ...state, percentage: action.payload }
+    case SET_WPM:
+      return calculateWPM(state, action.payload);
     default:
       return state;
   }
@@ -19,7 +22,7 @@ function initialRaceState(state, text) {
   const words = generateWordsState(text);
   const actualWord = generateActualWordState(words.currentWord);
 
-  return ({ words: words, actualWord: actualWord, userTypingText: "", error: false, percentage: 0 })
+  return ({ words: words, actualWord: actualWord, userTypingText: '', error: false, percentage: 0, ended: false, wpm: 0 })
 }
 
 function handleInputAction(state, payload) {
@@ -35,14 +38,19 @@ function handleInputAction(state, payload) {
 
 function setNextWord(state) {
   const { currentWord, completedText, remainingText } = state.words;
-  const currentTextWord = remainingText.shift();
+
+  if (remainingText.length === 0 ) {
+    return { ...state, ended: true };
+  }
+
   const pastWord = currentWord;
+  const currentTextWord = remainingText.shift();
   completedText.push(pastWord);
 
   const words = generateWordsState(null, completedText, remainingText, currentTextWord);
   const actualWord = generateActualWordState(currentTextWord);
 
-  return ({ words: words, actualWord: actualWord, userTypingText: "", error: false })
+  return ({...state, words: words, actualWord: actualWord, userTypingText: '', error: false })
 }
 
 function setCurrentWord(state, inputValue, currentWord) {
@@ -62,9 +70,11 @@ function setCurrentWord(state, inputValue, currentWord) {
 
 function generateWordsState(text = null, completedText, remainingText, currentWord) {
   if (text) {
+    text = text.split(" ");
+
+    currentWord = text.shift();
     completedText = [];
-    remainingText = text.split(" ");
-    currentWord = remainingText.shift();
+    remainingText = text;
   }
 
   return {
@@ -80,4 +90,10 @@ function generateActualWordState(currentWord = null, completed, remaining, curre
     remaining: !currentWord ? remaining : currentWord.substr(1),
     current: !currentWord ? current : currentWord.charAt(0)
   }
+}
+
+function calculateWPM(state ,seconds) {
+  const wpm = Math.floor(60 / seconds) * state.words.completedText.length;
+
+  return { ...state, wpm: wpm }
 }

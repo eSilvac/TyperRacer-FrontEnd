@@ -2,6 +2,8 @@
 import React from 'react';
 
 // Components
+import RaceTimer from './RaceTimer';
+import RaceOverMessage from './RaceOverMessage';
 
 // Bootstrap
 import Row from 'react-bootstrap/Row';
@@ -18,6 +20,7 @@ function RaceTrack({ raceTextStatus }) {
 
   return (
     <Row>
+      <RaceTimer />
       <Col xs={10}> 
         <div className="progress">
           <div className="progress-bar" style={progressStyle}>
@@ -28,9 +31,10 @@ function RaceTrack({ raceTextStatus }) {
       <Col xs={2} className="align-self-stretch">
         <div className="userInformation d-flex flex-column justify-content-center align-items-center h-100">
           <span>Username</span>
-          <span className="font-weight-bold">111 WpM</span>
+          <span className="font-weight-bold">{raceTextStatus.wpm} WpM</span>
         </div>
       </Col>
+      <RaceOverMessage />
     </Row>
   )
 }
