@@ -22,12 +22,12 @@ export function setRace(racePayload) {
   return dispatch => dispatchAction(dispatch, SET_RACE, currentRacePayload);
 }
 
-export function raceCountdown() {
-  return dispatch => dispatchAction(dispatch, RACE_COUNTDOWN, null);
+export function raceCountdown(time) {
+  return dispatch => dispatchAction(dispatch, RACE_COUNTDOWN, time);
 }
 
-export function raceTimer() {
-  return dispatch => dispatchAction(dispatch, RACE_TIMER, null);
+export function raceTimer(time) {
+  return dispatch => dispatchAction(dispatch, RACE_TIMER, time);
 }
 
 export function raceStart() {

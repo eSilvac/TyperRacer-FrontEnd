@@ -2,6 +2,9 @@
 import React, { Component }  from 'react';
 import './stylesheets/races.scss';
 
+//WebSocket
+import { socket } from './../../api/websocket';
+
 // Components
 import RaceText from './RaceText';
 import RaceInput from './RaceInput';
@@ -27,7 +30,22 @@ class Race extends Component {
 
   componentDidMount() {
     this.props.setInitialTextStatus(this.props.currentRace);
-    this.setNewInterval(this.raceCountdown.bind(this));
+
+    const raceEnd = this.props.raceEnd;
+    const raceStart = this.props.raceStart;
+    const raceTimer = this.props.raceTimer;
+    const raceCountdown = this.props.raceCountdown;
+
+    socket.on('raceTimeToStart', function(data) {
+      raceCountdown(data.time);
+      if (data.time <= 0) raceStart(); 
+    });
+
+    socket.on('raceTimeToEnd', function(data) {
+      raceTimer(data.time);
+      if (data.time <= 0) raceEnd(); 
+    });
+
   };
   
   componentWillUnmount() {
@@ -39,7 +57,6 @@ class Race extends Component {
   }
  
   raceCountdown() {
-    this.props.raceCountdown();
     if (this.props.currentRace.time.toStart <= 0) {
       this.props.raceStart();
       clearInterval(this.timer);
@@ -95,8 +112,8 @@ const mapDispatchToProps = dispatch => {
   return {
     raceEnd: () => dispatch(raceEnd()),
     raceStart: () => dispatch(raceStart()),
-    raceTimer: () => dispatch(raceTimer()),
-    raceCountdown: () => dispatch(raceCountdown()),
+    raceTimer: (time) => dispatch(raceTimer(time)),
+    raceCountdown: (time) => dispatch(raceCountdown(time)),
     setWPM: (time) => dispatch(setWPM(time)),
     setInitialTextStatus: (text) => dispatch(setInitialTextStatus(text))
   };
