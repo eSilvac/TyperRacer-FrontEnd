@@ -10,7 +10,7 @@ import Col from 'react-bootstrap/Col';
 // Redux
 import { connect } from 'react-redux';
 
-function RaceTimer({ raceTextStatus, currentRace }) {
+function RaceTimer({ currentRace }) {
   return (
     <Col xs={12} className="text-left mb-3"> 
       <span>Time Left: { TimeCounter(currentRace.time.toEnd) }</span>
@@ -20,8 +20,7 @@ function RaceTimer({ raceTextStatus, currentRace }) {
 
 
 const mapStateToProps = state => ({
-  currentRace: state.currentRace,
-  raceTextStatus: state.raceTextStatus
+  currentRace: state.currentRace
 });
 
 export default connect(mapStateToProps)(RaceTimer);

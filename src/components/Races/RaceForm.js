@@ -48,8 +48,6 @@ class RaceForm extends Component {
     } catch (error) {
       console.log(error);
       this.setState({ error });
-    } finally {
-      this.setState({ loading: false });
     }
   }
 

@@ -9,13 +9,13 @@ import RaceCurrentWord from './RaceCurrentWord';
 // Redux
 import { connect } from 'react-redux';
 
-function RaceText({ raceTextStatus }) {
-  if (Object.keys(raceTextStatus).length) {
+function RaceText({ participantStatus }) {
+  if (Object.keys(participantStatus).length) {
     return (
       <div>
-        <span className="text-success">{ raceTextStatus.words.completedText.join(" ") }</span>
+        <span className="text-success">{ participantStatus.words.completedText.join(" ") }</span>
         <RaceCurrentWord />
-        <span className="text-muted">{ raceTextStatus.words.remainingText.join(" ") }</span>
+        <span className="text-muted">{ participantStatus.words.remainingText.join(" ") }</span>
       </div>
     )
   } else {
@@ -24,7 +24,7 @@ function RaceText({ raceTextStatus }) {
 }
 
 const mapStateToProps = state => ({
-  raceTextStatus: state.raceTextStatus
+  participantStatus: state.participantStatus
 });
 
 export default connect(mapStateToProps)(RaceText);

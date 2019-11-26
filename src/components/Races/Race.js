@@ -26,19 +26,19 @@ class Race extends Component {
   }
 
   componentDidMount() {
-    this.props.setInitialTextStatus(this.props.currentRace.text);
+    this.props.setInitialTextStatus(this.props.currentRace);
     this.setNewInterval(this.raceCountdown.bind(this));
   };
+  
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
 
   setNewInterval(fn) {
     this.timer = setInterval(fn, 1000);
   }
  
   raceCountdown() {
-    if (!this.props.currentRace) { 
-      clearInterval(this.timer) 
-    }
-
     this.props.raceCountdown();
     if (this.props.currentRace.time.toStart <= 0) {
       this.props.raceStart();
@@ -48,14 +48,12 @@ class Race extends Component {
   }
 
   raceTimer() {
-    if (!this.props.currentRace) { return clearInterval(this.timer) }
-
     this.props.raceTimer();
     if (this.props.currentRace.time.toEnd <= 0)  {
       this.props.raceEnd();
       clearInterval(this.timer);
     } else {
-      if (!this.props.raceTextStatus.ended) { this.props.setWPM(this.props.currentRace.time.actual);}
+      if (!this.props.participantStatus.ended) { this.props.setWPM(this.props.currentRace.time.actual);}
     }
   }
 
@@ -90,7 +88,7 @@ class Race extends Component {
 
 const mapStateToProps = state => ({
   currentRace: state.currentRace,
-  raceTextStatus: state.raceTextStatus
+  participantStatus: state.participantStatus
 });
 
 const mapDispatchToProps = dispatch => {

@@ -44,6 +44,13 @@ const queries = {
         }
       }
     }
+  `,
+  createParticipant: `
+    mutation CreateParticipant($participantPayload: ParticipantInputType!) {
+      createParticipant(participantPayload: $participantPayload) {
+        id
+      }
+    }
   `
 }
 

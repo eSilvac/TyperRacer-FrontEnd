@@ -10,8 +10,8 @@ import RaceLockedInput from './RaceLockedInput';
 // Redux
 import { connect } from 'react-redux';
 
-function RaceInput({ currentRace, raceTextStatus }) {
-  if (currentRace.status === 'started' && raceTextStatus.ended === false) {
+function RaceInput({ currentRace, participantStatus }) {
+  if (currentRace.status === 'started' && participantStatus.ended === false) {
     return <RaceActiveInput />
   } else {
     return <RaceLockedInput />
@@ -20,7 +20,7 @@ function RaceInput({ currentRace, raceTextStatus }) {
 
 const mapStateToProps = state => ({
   currentRace: state.currentRace,
-  raceTextStatus: state.raceTextStatus
+  participantStatus: state.participantStatus
 });
 
 export default connect(mapStateToProps)(RaceInput);

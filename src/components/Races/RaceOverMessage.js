@@ -10,12 +10,12 @@ import Alert from 'react-bootstrap/Alert';
 // Redux
 import { connect } from 'react-redux';
 
-function RaceInput({ currentRace, raceTextStatus }) {
-  if (currentRace.status === 'ended' || raceTextStatus.ended === true) {
+function RaceInput({ currentRace, participantStatus }) {
+  if (currentRace.status === 'ended' || participantStatus.ended === true) {
     return (
       <Col xs={12}>
         <Alert variant="info" className="mt-3 mb-0">
-          You have finish 1. with 111 WpM
+          You have finish 1. with {participantStatus.wpm} WpM
         </Alert> 
       </Col>
     );
@@ -26,7 +26,7 @@ function RaceInput({ currentRace, raceTextStatus }) {
 
 const mapStateToProps = state => ({
   currentRace: state.currentRace,
-  raceTextStatus: state.raceTextStatus
+  participantStatus: state.participantStatus
 });
 
 export default connect(mapStateToProps)(RaceInput);

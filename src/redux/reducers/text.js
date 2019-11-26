@@ -3,7 +3,7 @@ import { SET_PERCENTAGE } from '../constants/action-types';
 import { SET_INPUT_STATUS } from '../constants/action-types';
 import { SET_INITIAL_STATE } from '../constants/action-types';
 
-export default function raceTextStatus(state = {}, action) {
+export default function participantStatus(state = {}, action) {
   switch (action.type) {
     case SET_INITIAL_STATE:
       return initialRaceState(state, action.payload);
@@ -18,11 +18,20 @@ export default function raceTextStatus(state = {}, action) {
   }
 };
 
-function initialRaceState(state, text) {
-  const words = generateWordsState(text);
+function initialRaceState(state, payload) {
+  const words = generateWordsState(payload.text);
   const actualWord = generateActualWordState(words.currentWord);
 
-  return ({ words: words, actualWord: actualWord, userTypingText: '', error: false, percentage: 0, ended: false, wpm: 0 })
+  return ({
+    id: payload.id,
+    words: words, 
+    actualWord: actualWord, 
+    userTypingText: '', 
+    error: false, 
+    percentage: 0, 
+    ended: false, 
+    wpm: 0 
+  })
 }
 
 function handleInputAction(state, payload) {
@@ -93,7 +102,7 @@ function generateActualWordState(currentWord = null, completed, remaining, curre
 }
 
 function calculateWPM(state ,seconds) {
-  const wpm = Math.floor(60 / seconds) * state.words.completedText.length;
+  const wpm = Math.floor((60 / seconds) * state.words.completedText.length);
 
   return { ...state, wpm: wpm }
 }

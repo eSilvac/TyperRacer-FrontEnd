@@ -8,13 +8,13 @@ import React from 'react';
 // Redux
 import { connect } from 'react-redux';
 
-function RaceText({ raceTextStatus }) {
-  if (Object.keys(raceTextStatus).length) {
+function RaceText({ participantStatus }) {
+  if (Object.keys(participantStatus).length) {
     return (
       <>
-        <span className="text-success">{ " " + raceTextStatus.actualWord.completed }</span>
-        <span className={(raceTextStatus.error ? " bg-error" : "") }><ins>{ raceTextStatus.actualWord.current }</ins></span>
-        <span className={(raceTextStatus.error ? "bg-error" : "text-muted")}>{ raceTextStatus.actualWord.remaining + " " }</span>
+        <span className="text-success">{ " " + participantStatus.actualWord.completed }</span>
+        <span className={(participantStatus.error ? " bg-error" : "") }><ins>{ participantStatus.actualWord.current }</ins></span>
+        <span className={(participantStatus.error ? "bg-error" : "text-muted")}>{ participantStatus.actualWord.remaining + " " }</span>
       </>
     )
   } else {
@@ -23,7 +23,7 @@ function RaceText({ raceTextStatus }) {
 }
 
 const mapStateToProps = state => ({
-  raceTextStatus: state.raceTextStatus
+  participantStatus: state.participantStatus
 });
 
 export default connect(mapStateToProps)(RaceText);

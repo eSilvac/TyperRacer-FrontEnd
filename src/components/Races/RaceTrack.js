@@ -13,9 +13,9 @@ import Image from 'react-bootstrap/Image';
 // Redux
 import { connect } from 'react-redux';
 
-function RaceTrack({ raceTextStatus }) {
+function RaceTrack({ participantStatus }) {
   const progressStyle = {
-    width: raceTextStatus.percentage + '%',
+    width: participantStatus.percentage + '%',
   };
 
   return (
@@ -31,7 +31,7 @@ function RaceTrack({ raceTextStatus }) {
       <Col xs={2} className="align-self-stretch">
         <div className="userInformation d-flex flex-column justify-content-center align-items-center h-100">
           <span>Username</span>
-          <span className="font-weight-bold">{raceTextStatus.wpm} WpM</span>
+          <span className="font-weight-bold">{participantStatus.wpm} WpM</span>
         </div>
       </Col>
       <RaceOverMessage />
@@ -41,7 +41,7 @@ function RaceTrack({ raceTextStatus }) {
 
 
 const mapStateToProps = state => ({
-  raceTextStatus: state.raceTextStatus
+  participantStatus: state.participantStatus
 });
 
 export default connect(mapStateToProps)(RaceTrack);

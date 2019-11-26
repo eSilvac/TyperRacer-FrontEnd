@@ -27,8 +27,8 @@ class RaceActiveInput extends Component {
         placeholder="Type the text"
         autoComplete="off"
         aria-describedby="inputGroupPrepend"
-        className={"text-input py-4" + (this.props.raceTextStatus.error ? " bg-error" : "") }
-        value={this.props.raceTextStatus.userTypingText} 
+        className={"text-input py-4" + (this.props.participantStatus.error ? " bg-error" : "") }
+        value={this.props.participantStatus.userTypingText} 
         onChange={this.handleKeyPress.bind(this)}
         autoFocus
       />
@@ -38,7 +38,7 @@ class RaceActiveInput extends Component {
 
 const mapStateToProps = state => ({
   currentRace: state.currentRace,
-  raceTextStatus: state.raceTextStatus
+  participantStatus: state.participantStatus
 });
 
 const mapDispatchToProps = dispatch => {
