@@ -2,6 +2,7 @@ export const FETCH_USER = 'FETCH_USER';
 export const LOGOUT_USER = 'LOGOUT_USER';
 
 export const SET_RACE = 'SET_RACE';
+export const SET_RACE_TIMING = 'SET_RACE_TIMING';
 export const CLOSE_RACE = 'CLOSE_RACE';
 export const RACE_END = 'RACE_END';
 export const RACE_TIMER = 'RACE_TIMER';

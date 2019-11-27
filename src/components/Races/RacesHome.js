@@ -1,11 +1,10 @@
 // Configurations
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useParams } from "react-router-dom";
 
 // Components
 import Race from './Race';
 import RaceForm from './RaceForm';
-import RaceTitle from './RaceTitle';
-import RaceLeaveLink from './RaceLeaveLink';
 
 // Bootstrap
 import Row from 'react-bootstrap/Row';
@@ -13,15 +12,20 @@ import Col from 'react-bootstrap/Col';
 
 // Redux
 import { connect } from 'react-redux';
+import { fetchRace } from './../../redux/actions/racehandle';
 
-function RaceHome({ currentRace }) {
+function RaceHome({ currentRace, fetchRace }) {
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) { fetchRace(id); }
+  }, []);
+
   return (
     <Row className="justify-content-center">
       {Object.keys(currentRace).length ? (
         <Col xs={12}>
-          <div className="text-center mt-5">
-            <RaceTitle />
-            <RaceLeaveLink />
+          <div className="text-center mt-4">
             <Race />
           </div>
         </Col>
@@ -44,4 +48,10 @@ const mapStateToProps = state => ({
   currentRace: state.currentRace
 });
 
-export default connect(mapStateToProps)(RaceHome);
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchRace: (id) => dispatch(fetchRace(id))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RaceHome);

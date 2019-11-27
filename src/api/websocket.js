@@ -1,4 +1,7 @@
 import io from 'socket.io-client';
-const socket = io('http://localhost:3001/');
 
-export { socket };
+export const connectToWS = (raceId) => {
+  const socket = io(`localhost:3001/${raceId}`);
+  return socket;
+}
+

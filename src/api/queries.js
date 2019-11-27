@@ -11,6 +11,21 @@ const queries = {
       }
     `
   },
+  getRace: (id) => {
+    return `
+      query GetRace {
+        getRace(id: "${id}") {
+          race {
+            id
+            status
+          }
+          quote {
+            text
+          }
+        }
+      }
+    `
+  },
   createUser: `
     mutation CreateNewUser($userPayload: UserRegisterInputType!) {
       registerUser(userPayload: $userPayload) {
@@ -37,7 +52,7 @@ const queries = {
       createRace(racePayload: $racePayload) {
         race {
           id
-          createdAt
+          status
         }
         quote {
           text
@@ -48,7 +63,14 @@ const queries = {
   createParticipant: `
     mutation CreateParticipant($participantPayload: ParticipantInputType!) {
       createParticipant(participantPayload: $participantPayload) {
-        id
+        participant {
+          id
+        }
+        timing {
+          toStart
+          toEnd
+          current
+        }
       }
     }
   `

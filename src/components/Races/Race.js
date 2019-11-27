@@ -3,12 +3,14 @@ import React, { Component }  from 'react';
 import './stylesheets/races.scss';
 
 //WebSocket
-import { socket } from './../../api/websocket';
 
 // Components
 import RaceText from './RaceText';
 import RaceInput from './RaceInput';
 import RaceTrack from './RaceTrack';
+import RaceTitle from './RaceTitle';
+import RaceShareLink from './RaceShareLink';
+import RaceLeaveLink from './RaceLeaveLink';
 
 // Bootstrap
 import Row from 'react-bootstrap/Row';
@@ -20,7 +22,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 // Redux
 import { connect } from 'react-redux';
 import { raceCountdown, raceStart, raceEnd, raceTimer } from './../../redux/actions/racehandle';
-import { setInitialTextStatus, setWPM } from './../../redux/actions/texthandle';
+import { setInitialParticipantStatus, setWPM } from './../../redux/actions/texthandle';
 
 class Race extends Component {
   constructor(props) {
@@ -29,23 +31,8 @@ class Race extends Component {
   }
 
   componentDidMount() {
-    this.props.setInitialTextStatus(this.props.currentRace);
-
-    const raceEnd = this.props.raceEnd;
-    const raceStart = this.props.raceStart;
-    const raceTimer = this.props.raceTimer;
-    const raceCountdown = this.props.raceCountdown;
-
-    socket.on('raceTimeToStart', function(data) {
-      raceCountdown(data.time);
-      if (data.time <= 0) raceStart(); 
-    });
-
-    socket.on('raceTimeToEnd', function(data) {
-      raceTimer(data.time);
-      if (data.time <= 0) raceEnd(); 
-    });
-
+    this.props.setInitialParticipantStatus(this.props.currentRace);
+    this.setNewInterval(this.raceCountdown.bind(this));
   };
   
   componentWillUnmount() {
@@ -61,44 +48,70 @@ class Race extends Component {
       this.props.raceStart();
       clearInterval(this.timer);
       this.setNewInterval(this.raceTimer.bind(this));
+      return;
     }
+
+    this.props.raceCountdown();
   }
 
   raceTimer() {
-    this.props.raceTimer();
     if (this.props.currentRace.time.toEnd <= 0)  {
       this.props.raceEnd();
-      clearInterval(this.timer);
+      this.setNewInterval(this.emitStatus.bind(this));
+      return;
     } else {
-      if (!this.props.participantStatus.ended) { this.props.setWPM(this.props.currentRace.time.actual);}
+      if (!this.props.participantStatus.ended) { 
+        this.emitStatus()
+        this.props.setWPM(this.props.currentRace.time.current);
+      }
     }
+
+    this.props.raceTimer();
+  }
+
+  emitStatus() {
+    const { id, wpm, percentage } = this.props.participantStatus;
+    const socketPayload = {
+      id: id,
+      username: this.props.currentUser ? this.props.currentUser.username : 'Anonymous',
+      wpm: wpm,
+      percentage: percentage
+    }
+    console.log(socketPayload)
+
+    this.props.currentRace.socket.emit('updateParticipant', socketPayload);
   }
 
   render () {
     return (
-      <Row className="justify-content-center my-4">
-        <Col className="raceText" xs={5}>
-          <Card body className="mt-2">
-            <RaceText />
-          </Card>
-          <Form onSubmit={ e => e.preventDefault() }>
-            <Form.Group className="mt-3">
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroupPrepend">Type Here!</InputGroup.Text>
-                </InputGroup.Prepend>
-                <RaceInput />
-              </InputGroup>
-            </Form.Group>
-          </Form>
-        </Col>
+      <>
+        <RaceShareLink />
+        <RaceTitle />
+        <RaceLeaveLink />
+        <Row className="justify-content-center my-4">
+          <Col className="raceText" xs={5}>
+            <Card body className="mt-2">
+              <RaceText />
+            </Card>
+            <Form onSubmit={ e => e.preventDefault() }>
+              <Form.Group className="mt-3">
+                <InputGroup>
+                  <InputGroup.Prepend>
+                    <InputGroup.Text id="inputGroupPrepend">Type Here!</InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <RaceInput />
+                </InputGroup>
+              </Form.Group>
+            </Form>
+          </Col>
 
-        <Col className="raceTrack" xs={5}>
-          <Card body className="mt-2">
-            <RaceTrack />
-          </Card>
-        </Col>
-      </Row>
+          <Col className="raceTrack" xs={5}>
+            <Card body className="mt-2">
+              <RaceTrack />
+            </Card>
+          </Col>
+        </Row>
+      </>
     );
   }
 }
@@ -112,10 +125,10 @@ const mapDispatchToProps = dispatch => {
   return {
     raceEnd: () => dispatch(raceEnd()),
     raceStart: () => dispatch(raceStart()),
-    raceTimer: (time) => dispatch(raceTimer(time)),
-    raceCountdown: (time) => dispatch(raceCountdown(time)),
+    raceTimer: () => dispatch(raceTimer()),
+    raceCountdown: () => dispatch(raceCountdown()),
     setWPM: (time) => dispatch(setWPM(time)),
-    setInitialTextStatus: (text) => dispatch(setInitialTextStatus(text))
+    setInitialParticipantStatus: (text) => dispatch(setInitialParticipantStatus(text))
   };
 };
 

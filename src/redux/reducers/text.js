@@ -77,6 +77,7 @@ function setCurrentWord(state, inputValue, currentWord) {
   return ({ ...state, actualWord: actualWord, error: false })
 }
 
+
 function generateWordsState(text = null, completedText, remainingText, currentWord) {
   if (text) {
     text = text.split(" ");

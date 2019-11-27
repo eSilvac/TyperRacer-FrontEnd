@@ -15,7 +15,7 @@ function RaceTitle({ currentRace }) {
     case 'ended':
       return (<h3 className="bold-weight-bold">The Race is Over !</h3>);
     default:
-      return (<h3>The Race will start in {currentRace.time.toStart}</h3>);
+      return (<h3>The Race will start in { currentRace.time ? currentRace.time.toStart : '' }</h3>);
   }
 }
 

@@ -1,3 +1,6 @@
+import { GraphqlApi, GraphqlQueries } from '../../api/graphql'
+import { connectToWS } from '../../api/websocket';
+
 import { SET_RACE } from '../constants/action-types';
 import { RACE_END } from '../constants/action-types';
 import { RACE_START } from '../constants/action-types';
@@ -13,21 +16,28 @@ const dispatchAction = (dispatch, type, payload) => {
 };
 
 export function setRace(racePayload) {
-  const currentRacePayload = { 
-    id: racePayload.race.id,
-    text: racePayload.quote.text,
-    time: generateRaceTiming(racePayload.quote.text),
-    status: "waiting"
+  return dispatch => dispatchAction(dispatch, SET_RACE, generateRacePayload(racePayload));
+}
+
+export function fetchRace(id) {
+  return async (dispatch, getState) => {  
+    try {
+      const { data } = await GraphqlApi.post('graphql', {
+        query: GraphqlQueries.getRace(id),
+      });
+      dispatchAction(dispatch, SET_RACE, generateRacePayload(data.data.getRace));
+    } catch (error) {
+      console.log(error);
+    }
   }
-  return dispatch => dispatchAction(dispatch, SET_RACE, currentRacePayload);
 }
 
-export function raceCountdown(time) {
-  return dispatch => dispatchAction(dispatch, RACE_COUNTDOWN, time);
+export function raceCountdown() {
+  return dispatch => dispatchAction(dispatch, RACE_COUNTDOWN, null);
 }
 
-export function raceTimer(time) {
-  return dispatch => dispatchAction(dispatch, RACE_TIMER, time);
+export function raceTimer() {
+  return dispatch => dispatchAction(dispatch, RACE_TIMER, null);
 }
 
 export function raceStart() {
@@ -42,14 +52,11 @@ export function closeRace() {
   return dispatch => dispatchAction(dispatch, CLOSE_RACE, null);
 }
 
-const generateRaceTiming = (text) => {
-  //const textLength = text.split(" ").length;
-  //const maxTime = textLength * 5;
-  
+const generateRacePayload = (racePayload) => {
   return {
-    actual: 0,
-    toStart: 5,
-    toEnd: 120
+    id: racePayload.race.id,
+    text: racePayload.quote.text,
+    status: "waiting",
+    socket: connectToWS(racePayload.race.id)
   }
 }
-

@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 function RaceTimer({ currentRace }) {
   return (
     <Col xs={12} className="text-left mb-3"> 
-      <span>Time Left: { TimeCounter(currentRace.time.toEnd) }</span>
+      <span>Time Left: { currentRace.time ? TimeCounter(currentRace.time.toEnd) : '' }</span>
     </Col>
   )
 }
