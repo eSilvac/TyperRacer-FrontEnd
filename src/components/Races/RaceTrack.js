@@ -17,7 +17,6 @@ class RaceTrack extends Component {
   constructor(props) {
     super(props);
     this.handleWS = this.handleWS.bind(this);
-    this.handleWSUpdate = this.handleWSUpdate.bind(this);
 
     this.state = {
       participants: []
