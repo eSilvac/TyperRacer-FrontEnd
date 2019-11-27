@@ -4,7 +4,7 @@ import queries from './queries';
 export const GraphqlQueries = queries;
 
 export const GraphqlApi = axios.create({
-  baseURL: "http://localhost:3001/",
+  baseURL: "https://tapyracer.herokuapp.com/",
   timeout: 5000,
   headers: {
     "Access-Control-Allow-Origin": "*"
