@@ -9,7 +9,7 @@ import { closeRace } from './../../redux/actions/racehandle';
 
 function NavbarHomeButton({ closeRace }) {
   return (
-    <Link className="navbar-brand" to="/" onClick={ closeRace }>TypeRacer v2</Link>
+    <Link className="navbar-brand" to="/" onClick={ closeRace }>TapyRacer</Link>
   );
 }
 
